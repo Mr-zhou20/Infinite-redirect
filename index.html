@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .arrow-hint {
+    position: fixed;
+    top: 0px;
+    right: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 9999;
+  }
+
+  .arrow-svg {
+    display: block;
+    margin-left: auto;
+    filter: drop-shadow(0 2px 6px rgba(255, 77, 79, 0.5));
+    cursor: pointer;
+  }
+
+  .arrow-label {
+    margin-top: 4px;
+    background: #ff4d4f;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    box-shadow: 0 6px 16px rgba(255, 77, 79, 0.35);
+    line-height: 1.4;
+    text-align: right;
+    cursor: pointer;
+  }
+
+  .refresh-hint {
+    margin-top: 6px;
+    background: #1677ff;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    box-shadow: 0 6px 16px rgba(22, 119, 255, 0.35);
+    line-height: 1.4;
+    text-align: right;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .refresh-hint:hover {
+    background: #0958d9;
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+  <div id="arrowHint" class="arrow-hint hidden">
+    <svg class="arrow-svg" width="44" height="44" viewBox="0 0 24 24" fill="none">
+      <path d="M7 17L17 7M17 7H9M17 7V15"
+            stroke="#ff4d4f" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="arrow-label">
+      点这里！<br>选择“允许”
+    </div>
+    <div class="refresh-hint" id="refreshHint">
+      允许后请刷新页面 ↻
+    </div>
+  </div>
+
+  <script>
+    // 修改成你要跳转的网址
+    const targetUrl = 'https://example.com';
+    const arrowHint = document.getElementById('arrowHint');
+    const refreshHint = document.getElementById('refreshHint');
+
+    function openTarget() {
+      const win = window.open(targetUrl, '_blank');
+
+      if (win) {
+        try { win.opener = null; } catch (e) {}
+        arrowHint.classList.add('hidden');
+      } else {
+        arrowHint.classList.remove('hidden');
+      }
+
+      return win;
+    }
+
+    window.addEventListener('load', function () {
+      openTarget();
+    });
+
+    arrowHint.addEventListener('click', function (e) {
+      if (e.target === refreshHint) return;
+      openTarget();
+    });
+
+    refreshHint.addEventListener('click', function (e) {
+      e.stopPropagation();
+      location.reload();
+    });
+  </script>
+</body>
+</html>
